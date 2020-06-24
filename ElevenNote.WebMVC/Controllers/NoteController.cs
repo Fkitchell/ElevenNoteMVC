@@ -7,6 +7,7 @@ using System.Web.Mvc;
 
 namespace ElevenNote.WebMVC.Controllers
 {
+    [Authorize]
     public class NoteController : Controller
     {
         // GET: Note
@@ -14,12 +15,6 @@ namespace ElevenNote.WebMVC.Controllers
         {
             var model = new NoteListItem[0];
             return View(model);
-        }
-
-        // GET: Note/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
         }
 
         // GET: Note/Create
@@ -30,18 +25,22 @@ namespace ElevenNote.WebMVC.Controllers
 
         // POST: Note/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(NoteCreate model)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add insert logic here
+                //return RedirectToAction("Index");
+            }
+                
+            return View(model);
+         
+        }
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+        // GET: Note/Details/5
+        public ActionResult Details(int id)
+        {
+            return View();
         }
 
         // GET: Note/Edit/5
