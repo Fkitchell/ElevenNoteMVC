@@ -81,7 +81,16 @@ namespace ElevenNote.WebMVC.Controllers
         // GET: Note/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            var service = CreateNoteService();
+            var detail = service.GetNoteById(id);
+            var model = new NoteEdit
+            {
+                //NoteId=detail.NoteId,
+                Title = detail.Title,
+                Content = detail.Content,
+            };
+
+            return View(model);
         }
 
         // POST: Note/Edit/5
