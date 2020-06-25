@@ -52,23 +52,25 @@ namespace ElevenNote.WebMVC.Controllers
         // GET: Note/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            var service = CreateNoteService();
+            var model = service.GetNoteById(id);
+            return View(model);
         }
 
         // POST: Note/Delete/5
         [HttpPost]
+        [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            var service = CreateNoteService();
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            service.DeleteNote(id);
+
+            TempData["SaveResult"] = "Your note was deleted.";
+            
+            return RedirectToAction("Index");
+        
         }
 
         // GET: Note/Details/5
