@@ -20,15 +20,6 @@ namespace ElevenNote.WebMVC.Controllers
             return service;
         }
 
-        // GET: Note
-        public ActionResult Index()
-        {
-            var service = CreateNoteService();
-            var model = service.GetNotes();
-
-            return View(model);
-        }
-
         // GET: Note/Create
         public ActionResult Create()
         {
@@ -46,7 +37,7 @@ namespace ElevenNote.WebMVC.Controllers
             }
 
             var service = CreateNoteService();
-            
+
             if (service.CreateNote(model))
             {
                 ViewBag.SaveResult = "Your note was created.";
@@ -57,10 +48,34 @@ namespace ElevenNote.WebMVC.Controllers
             return View(model);
         }
 
+        // GET: Note/Delete/5
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+        // POST: Note/Delete/5
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
+
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
         // GET: Note/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            var service = CreateNoteService();
+            var model = service.GetNoteById(id);
+            return View(model);
         }
 
         // GET: Note/Edit/5
@@ -85,26 +100,13 @@ namespace ElevenNote.WebMVC.Controllers
             }
         }
 
-        // GET: Note/Delete/5
-        public ActionResult Delete(int id)
+        // GET: Note
+        public ActionResult Index()
         {
-            return View();
-        }
+            var service = CreateNoteService();
+            var model = service.GetNotes();
 
-        // POST: Note/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return View(model);
         }
     }
 }
