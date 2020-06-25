@@ -12,11 +12,18 @@ namespace ElevenNote.WebMVC.Controllers
     [Authorize]
     public class NoteController : Controller
     {
-        // GET: Note
-        public ActionResult Index()
+        //Helper methods
+        private NoteService CreateNoteService()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
             var service = new NoteService(userId);
+            return service;
+        }
+
+        // GET: Note
+        public ActionResult Index()
+        {
+            var service = CreateNoteService();
             var model = service.GetNotes();
 
             return View(model);
@@ -38,12 +45,16 @@ namespace ElevenNote.WebMVC.Controllers
                 return View(model);
             }
 
-            var userId = Guid.Parse(User.Identity.GetUserId());
-            var service = new NoteService(userId);
+            var service = CreateNoteService();
+            
+            if (service.CreateNote(model))
+            {
+                ViewBag.SaveResult = "Your note was created.";
+                return RedirectToAction("Index");
+            }
 
-            service.CreateNote(model);
-
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Note could not be created.");
+            return View(model);
         }
 
         // GET: Note/Details/5
